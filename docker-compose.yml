@@ -1,0 +1,28 @@
+name: mbn-knews
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: mbn-knews-mysql
+    environment:
+      MYSQL_DATABASE: kculture
+      MYSQL_USER: kculture
+      MYSQL_PASSWORD: local-password
+      MYSQL_ROOT_PASSWORD: local-root-password
+      TZ: UTC
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --default-time-zone=+00:00
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-plocal-root-password"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  mysql-data:
