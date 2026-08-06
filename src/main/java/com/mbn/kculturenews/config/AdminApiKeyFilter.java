@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -27,7 +28,8 @@ public class AdminApiKeyFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return !StringUtils.hasText(adminApiKey)
+        return CorsUtils.isPreFlightRequest(request)
+                || !StringUtils.hasText(adminApiKey)
                 || !request.getRequestURI().startsWith("/api/v1/admin/");
     }
 

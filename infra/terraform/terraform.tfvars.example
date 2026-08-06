@@ -1,0 +1,17 @@
+aws_region        = "ap-northeast-2"
+project_name      = "mbn-knews"
+image_tag         = "latest"
+desired_count     = 1
+high_availability = false
+certificate_arn   = ""
+domain_name       = ""
+
+db_name           = "kculture"
+db_username       = "kculture"
+db_instance_class = "db.t4g.micro"
+backup_retention_days = 1
+
+naver_client_id     = "replace-with-naver-api-key-id"
+naver_client_secret = "replace-with-naver-api-key"
+admin_api_key       = "replace-with-a-long-random-admin-key"
+openai_api_key_secret_arn = "arn:aws:secretsmanager:ap-northeast-2:123456789012:secret:mbn-knews/openai-api-key-example"

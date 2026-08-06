@@ -52,8 +52,21 @@ public class Article {
     @Column(nullable = false, length = 500)
     private String title;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
+    @Column(columnDefinition = "LONGTEXT")
+    private String content;
+
+    @Column(length = 500)
+    private String summary;
+
+    private Instant summaryGeneratedAt;
+
+    private Instant contentFetchedAt;
+
+    @Column(length = 2048)
+    private String imageUrl;
+
+    @Column(length = 200)
+    private String journalistName;
 
     private Instant publishedAt;
 
@@ -82,7 +95,9 @@ public class Article {
             String sourceUrlHash,
             String externalGuid,
             String title,
-            String description,
+            String content,
+            String imageUrl,
+            String journalistName,
             Instant publishedAt,
             Instant collectedAt
     ) {
@@ -95,7 +110,10 @@ public class Article {
         article.sourceCategory = "ENTERTAINMENT";
         article.originalLanguageCode = "ko";
         article.title = title;
-        article.description = description;
+        article.content = content;
+        article.contentFetchedAt = collectedAt;
+        article.imageUrl = imageUrl;
+        article.journalistName = journalistName;
         article.publishedAt = publishedAt;
         article.collectedAt = collectedAt;
         article.status = ArticleStatus.PUBLISHED;
@@ -136,8 +154,29 @@ public class Article {
         return title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getContent() {
+        return content;
+    }
+
+    public Instant getContentFetchedAt() {
+        return contentFetchedAt;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void cacheSummary(String summary, Instant generatedAt) {
+        this.summary = summary;
+        this.summaryGeneratedAt = generatedAt;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getJournalistName() {
+        return journalistName;
     }
 
     public Instant getPublishedAt() {
@@ -150,5 +189,38 @@ public class Article {
 
     public ArticleStatus getStatus() {
         return status;
+    }
+
+    public boolean applySourceDocument(
+            String content,
+            String imageUrl,
+            String journalistName,
+            Instant originalPublishedAt,
+            Instant changedAt
+    ) {
+        boolean changed = false;
+        if (content != null && !content.equals(this.content)) {
+            this.content = content;
+            this.contentFetchedAt = changedAt;
+            this.summary = null;
+            this.summaryGeneratedAt = null;
+            changed = true;
+        }
+        if (this.imageUrl == null && imageUrl != null) {
+            this.imageUrl = imageUrl;
+            changed = true;
+        }
+        if (this.journalistName == null && journalistName != null) {
+            this.journalistName = journalistName;
+            changed = true;
+        }
+        if (originalPublishedAt != null && !originalPublishedAt.equals(this.publishedAt)) {
+            this.publishedAt = originalPublishedAt;
+            changed = true;
+        }
+        if (changed) {
+            this.updatedAt = changedAt;
+        }
+        return changed;
     }
 }

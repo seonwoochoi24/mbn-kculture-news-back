@@ -2,7 +2,6 @@ HELP.md
 .DS_Store
 .env
 .env.*
-!.env.production.example
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -39,3 +38,12 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Terraform ###
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+*.auto.tfvars
+tfplan*
+crash.log

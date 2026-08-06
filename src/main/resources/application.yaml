@@ -50,3 +50,10 @@ app:
     base-url: ${NAVER_API_BASE_URL:https://naverapihub.apigw.ntruss.com}
     client-id: ${NAVER_CLIENT_ID:}
     client-secret: ${NAVER_CLIENT_SECRET:}
+  openai:
+    base-url: ${OPENAI_API_BASE_URL:https://api.openai.com}
+    api-key: ${OPENAI_API_KEY:}
+    model: ${OPENAI_MODEL:gpt-4o-mini}
+    prompt-version: ${OPENAI_TRANSLATION_PROMPT_VERSION:translation-v1}
+    cultural-prompt-version: ${OPENAI_CULTURAL_PROMPT_VERSION:cultural-term-v1}
+    max-input-chars: ${OPENAI_TRANSLATION_MAX_INPUT_CHARS:12000}
